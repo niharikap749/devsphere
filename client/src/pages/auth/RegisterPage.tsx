@@ -1,3 +1,13 @@
+import AuthLayout from "@/components/layout/AuthLayout";
+import RegisterForm from "@/components/auth/RegisterForm";
+
 export default function RegisterPage() {
-    return <h1>Register</h1>;
+  return (
+    <AuthLayout
+      title="Create your account 🚀"
+      subtitle="Join DevSphere and supercharge your development workflow"
+    >
+      <RegisterForm />
+    </AuthLayout>
+  );
 }
