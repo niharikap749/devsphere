@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
 import authRoutes from "./routes/auth.routes";
+import projectRoutes from "./routes/project.routes";
+import aiRoutes from "./ai/ai.routes"; // 👈 Add this
 
 dotenv.config();
 
@@ -10,8 +13,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 👇 ADD THIS
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/ai", aiRoutes); // 👈 Add this
 
 app.get("/health", (_req, res) => {
   res.json({

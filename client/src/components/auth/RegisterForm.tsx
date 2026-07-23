@@ -21,6 +21,8 @@ export default function RegisterForm() {
   ) {
     e.preventDefault();
 
+    alert("Register clicked");
+
     setLoading(true);
     setError("");
 
@@ -87,15 +89,15 @@ export default function RegisterForm() {
         </p>
       )}
 
-      <Button
-        className="w-full"
-        disabled={loading}
-      >
-        {loading
-          ? "Creating Account..."
-          : "Create Account"}
-      </Button>
-
+<Button
+  type="submit"
+  className="w-full"
+  disabled={loading}
+>
+  {loading
+    ? "Creating Account..."
+    : "Create Account"}
+</Button>
       <p className="text-center text-sm text-slate-400">
         Already have an account?{" "}
         <Link

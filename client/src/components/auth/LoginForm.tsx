@@ -19,19 +19,17 @@ export default function LoginForm() {
     e: React.FormEvent<HTMLFormElement>
   ) {
     e.preventDefault();
-
+  
+    alert("handleSubmit is running");
+  
     setLoading(true);
     setError("");
-
+  
     try {
       await login(email, password);
-
       navigate("/dashboard");
     } catch (err: any) {
-      setError(
-        err?.response?.data?.message ??
-          "Login failed"
-      );
+      setError(err?.response?.data?.message ?? "Login failed");
     } finally {
       setLoading(false);
     }
@@ -74,15 +72,13 @@ export default function LoginForm() {
         </p>
       )}
 
-      <Button
-        className="w-full"
-        disabled={loading}
-      >
-        {loading
-          ? "Signing In..."
-          : "Sign In"}
-      </Button>
-
+<Button
+  type="submit"
+  className="w-full"
+  disabled={loading}
+>
+  {loading ? "Signing In..." : "Sign In"}
+</Button>
       <p className="text-center text-sm text-slate-400">
         Don't have an account?{" "}
         <Link

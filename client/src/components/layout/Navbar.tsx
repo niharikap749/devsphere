@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
@@ -11,25 +12,29 @@ export default function Navbar() {
         <div className="flex items-center gap-6">
           <a
             href="#features"
-            className="text-slate-300 hover:text-white transition"
+            className="text-slate-300 transition hover:text-white"
           >
             Features
           </a>
 
           <a
             href="#about"
-            className="text-slate-300 hover:text-white transition"
+            className="text-slate-300 transition hover:text-white"
           >
             About
           </a>
 
-          <Button variant="outline">
-            Login
-          </Button>
+          <Link to="/login">
+            <Button variant="outline">
+              Login
+            </Button>
+          </Link>
 
-          <Button>
-            Get Started
-          </Button>
+          <Link to="/register">
+            <Button>
+              Get Started
+            </Button>
+          </Link>
         </div>
       </div>
     </nav>
