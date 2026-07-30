@@ -1,22 +1,25 @@
 import { useState } from "react";
-
-import ChatWindow from "../components/ai/ChatWindow";
+import DashboardLayout from "../components/layout/DashboardLayout";
 import ChatInput from "../components/ai/ChatInput";
-import TypingIndicator from "../components/ai/TypingIndicator";
+import ChatWindow from "../components/ai/ChatWindow";
 import EmptyState from "../components/ai/EmptyState";
-
-import AppLayout from "../components/layout/AppLayout";
 import PromptSuggestions from "../components/ai/PromptSuggestions";
+import TypingIndicator from "../components/ai/TypingIndicator";
 
-import { sendMessage } from "../services/ai";
+import { useConversation } from "../context/ConversationContext";
+import { sendMessage } from "../services/ai.service";
+
 import type { Message } from "../types/chat";
 
 export default function AIChat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { currentConversation, updateMessages } = useConversation();
+
   const [loading, setLoading] = useState(false);
 
+  const messages = currentConversation?.messages ?? [];
+
   async function handleSend(prompt: string) {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() || loading) return;
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
@@ -24,11 +27,15 @@ export default function AIChat() {
       content: prompt,
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    // Add user message immediately
+    const updatedMessages = [...messages, userMessage];
+    updateMessages(updatedMessages);
+
     setLoading(true);
 
     try {
-      const data = await sendMessage(prompt);
+      // Send complete conversation history
+      const data = await sendMessage(updatedMessages);
 
       const aiMessage: Message = {
         id: crypto.randomUUID(),
@@ -36,35 +43,37 @@ export default function AIChat() {
         content: data.response,
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
+      // Save AI response
+      updateMessages([...updatedMessages, aiMessage]);
     } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content:
-            "❌ Sorry, something went wrong while generating the response.",
-        },
-      ]);
+      console.error(error);
+
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          "❌ Sorry, something went wrong while generating the response.",
+      };
+
+      updateMessages([...updatedMessages, errorMessage]);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <AppLayout>
+    <DashboardLayout>
       <div className="flex h-full flex-col bg-zinc-950">
         {/* Chat Area */}
         <div className="flex-1 overflow-y-auto p-8">
           {messages.length === 0 ? (
             <div className="space-y-8">
-            <EmptyState />
-          
-            <PromptSuggestions
-              onSelect={handleSend}
-            />
-          </div>
+              <EmptyState />
+
+              <PromptSuggestions
+                onSelect={handleSend}
+              />
+            </div>
           ) : (
             <ChatWindow messages={messages} />
           )}
@@ -80,6 +89,6 @@ export default function AIChat() {
           />
         </div>
       </div>
-    </AppLayout>
+    </DashboardLayout>
   );
 }

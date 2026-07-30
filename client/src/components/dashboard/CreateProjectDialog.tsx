@@ -36,17 +36,18 @@ export default function CreateProjectDialog({ onCreated }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>+ New Project</Button>
+      <DialogTrigger
+        render={<Button variant="default" />}
+      >
+        + New Project
       </DialogTrigger>
 
-      <DialogContent className="bg-slate-900 border-slate-800">
+      <DialogContent className="bg-slate-900 border border-slate-800">
         <DialogHeader>
           <DialogTitle>Create Project</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-
           <Input
             placeholder="Project Title"
             value={title}
@@ -65,7 +66,6 @@ export default function CreateProjectDialog({ onCreated }: Props) {
           >
             Create Project
           </Button>
-
         </div>
       </DialogContent>
     </Dialog>

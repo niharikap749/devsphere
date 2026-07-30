@@ -1,7 +1,12 @@
 import { client } from "./openrouter";
 
+interface ChatMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
 export async function generateResponse(
-  prompt: string,
+  messages: ChatMessage[],
   systemInstruction?: string
 ) {
   const completion = await client.chat.completions.create({
@@ -19,10 +24,7 @@ export async function generateResponse(
           ]
         : []),
 
-      {
-        role: "user",
-        content: prompt,
-      },
+      ...messages,
     ],
   });
 

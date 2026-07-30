@@ -4,7 +4,7 @@ import {
     useEffect,
     useState,
   } from "react";
-  import * as authService from "../services/auth";
+  import * as authService from "../services/auth.service";
   
   interface User {
     id: string;

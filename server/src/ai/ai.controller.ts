@@ -3,25 +3,25 @@ import * as aiService from "./ai.service";
 
 export async function chat(req: Request, res: Response) {
   try {
-    const { prompt } = req.body;
+    const { messages } = req.body;
 
-    if (!prompt) {
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Prompt is required",
+        message: "Messages are required",
       });
     }
 
-    const response = await aiService.generateResponse(prompt);
+    const response = await aiService.generateResponse(messages);
 
-    res.json({
+    return res.json({
       success: true,
       response,
     });
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to generate response",
     });

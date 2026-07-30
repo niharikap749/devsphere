@@ -42,51 +42,52 @@ export default function MessageBubble({ role, content }: Props) {
             : "bg-zinc-900 border border-zinc-800 text-zinc-100"
         }`}
       >
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={{
-            code({ inline, className, children, ...props }) {
-              const match = /language-(\w+)/.exec(className || "");
+           <ReactMarkdown
+  remarkPlugins={[remarkGfm]}
+  components={{
+    code({ className, children, ...props }) {
+      const match = /language-(\w+)/.exec(className || "");
+      const code = String(children).replace(/\n$/, "");
 
-              if (!inline && match) {
-                const code = String(children).replace(/\n$/, "");
+      if (match) {
+        return (
+          <div className="overflow-hidden rounded-xl">
+            <div className="flex items-center justify-between bg-zinc-800 px-4 py-2 text-sm">
+              <span>{match[1]}</span>
 
-                return (
-                  <div className="overflow-hidden rounded-xl">
-                    <div className="flex items-center justify-between bg-zinc-800 px-4 py-2 text-sm">
-                      <span>{match[1]}</span>
+              <button
+                onClick={() => copyText(code)}
+                className="flex items-center gap-2 hover:text-blue-400"
+              >
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+                {copied ? "Copied" : "Copy"}
+              </button>
+            </div>
 
-                      <button
-                        onClick={() => copyText(code)}
-                        className="flex items-center gap-2 hover:text-blue-400"
-                      >
-                        {copied ? <Check size={16} /> : <Copy size={16} />}
-                        {copied ? "Copied" : "Copy"}
-                      </button>
-                    </div>
+            <SyntaxHighlighter
+              style={oneDark}
+              language={match[1]}
+              PreTag="div"
+            >
+              {code}
+            </SyntaxHighlighter>
+          </div>
+        );
+      }
 
-                    <SyntaxHighlighter
-                      style={oneDark}
-                      language={match[1]}
-                      PreTag="div"
-                      {...props}
-                    >
-                      {code}
-                    </SyntaxHighlighter>
-                  </div>
-                );
-              }
-
-              return (
-                <code className="rounded bg-zinc-800 px-1 py-0.5">
-                  {children}
-                </code>
-              );
-            },
-          }}
+      return (
+        <code
+          className="rounded bg-zinc-800 px-1 py-0.5"
+          {...props}
         >
-          {content}
-        </ReactMarkdown>
+          {children}
+        </code>
+      );
+    },
+  }}
+>
+  {content}
+</ReactMarkdown>
       </div>
 
       {isUser && (
