@@ -10,5 +10,13 @@
 
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "list-models.ts",
+    "test-gemini.ts",
+    "prisma.config.ts"
+  ]
 }

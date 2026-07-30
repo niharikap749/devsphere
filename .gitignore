@@ -1,0 +1,55 @@
+# =========================
+# Node Modules
+# =========================
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# =========================
+# Build Outputs
+# =========================
+client/dist/
+server/dist/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+client/.env
+client/.env.*
+server/.env
+server/.env.*
+
+# =========================
+# TypeScript
+# =========================
+*.tsbuildinfo
+
+# =========================
+# Logs
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Generated JavaScript Files
+# =========================
+server/list-models.js
+server/test-gemini.js
+server/prisma.config.js
