@@ -21,7 +21,6 @@ export default function RegisterForm() {
   ) {
     e.preventDefault();
 
-    alert("Register clicked");
 
     setLoading(true);
     setError("");

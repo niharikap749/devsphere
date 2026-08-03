@@ -7,26 +7,45 @@ interface ChatMessage {
 
 export async function generateResponse(
   messages: ChatMessage[],
-  systemInstruction?: string
+  document?: string
 ) {
-  const completion = await client.chat.completions.create({
-    model:
-      process.env.OPENROUTER_MODEL ||
-      "deepseek/deepseek-chat-v3.1:free",
+  let systemPrompt =
+    "You are DevSphere AI, a helpful AI developer assistant.";
 
-    messages: [
-      ...(systemInstruction
-        ? [
-            {
-              role: "system" as const,
-              content: systemInstruction,
-            },
-          ]
-        : []),
+  if (document && document.trim().length > 0) {
+    systemPrompt += `
 
-      ...messages,
-    ],
-  });
+The user has uploaded a document.
 
-  return completion.choices[0].message.content ?? "";
+Use ONLY this document to answer document-related questions.
+
+If the answer cannot be found in the document, clearly say:
+
+"I couldn't find that information in the uploaded document."
+
+Uploaded Document:
+
+${document}`;
+  }
+
+  const completion =
+    await client.chat.completions.create({
+      model:
+        process.env.OPENROUTER_MODEL ||
+        "deepseek/deepseek-chat-v3.1:free",
+
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+
+        ...messages,
+      ],
+    });
+
+  return (
+    completion.choices[0].message.content ??
+    ""
+  );
 }

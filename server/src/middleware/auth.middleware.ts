@@ -4,24 +4,25 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 export interface AuthRequest extends Request {
-  user?: {
+  user: {
     id: string;
-    email?: string;
+    email: string;
   };
 }
 
 export function authenticate(
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
-) {
+): void {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).json({
+      res.status(401).json({
         message: "Unauthorized",
       });
+      return;
     }
 
     const token = authHeader.split(" ")[1];
@@ -31,11 +32,11 @@ export function authenticate(
       email: string;
     };
 
-    req.user = decoded;
+    (req as AuthRequest).user = decoded;
 
     next();
   } catch {
-    return res.status(401).json({
+    res.status(401).json({
       message: "Invalid token",
     });
   }

@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-slate-950 px-6">
       <div className="max-w-4xl text-center">
-
         <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm text-indigo-300">
           AI Developer Workspace
         </span>
@@ -21,20 +23,27 @@ export default function Hero() {
         </p>
 
         <div className="mt-10 flex justify-center gap-4">
-
-          <Button size="lg">
+          <Button
+            size="lg"
+            onClick={() => navigate("/register")}
+          >
             Get Started
           </Button>
 
           <Button
             variant="outline"
             size="lg"
+            className="border-slate-600 text-white hover:bg-slate-800 hover:text-white"
+            onClick={() =>
+              window.open(
+                "https://github.com/niharikap749/devsphere",
+                "_blank"
+              )
+            }
           >
             View GitHub
           </Button>
-
         </div>
-
       </div>
     </section>
   );

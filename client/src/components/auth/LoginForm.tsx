@@ -20,8 +20,6 @@ export default function LoginForm() {
   ) {
     e.preventDefault();
   
-    alert("handleSubmit is running");
-  
     setLoading(true);
     setError("");
   

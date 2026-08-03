@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { z } from "zod";
+
 import {
-    registerUser,
-    loginUser,
-    getCurrentUser,
-  } from "../services/auth.service";
-  
-  import { AuthRequest } from "../middleware/auth.middleware";
+  registerUser,
+  loginUser,
+  getCurrentUser,
+} from "../services/auth.service";
+
+import { AuthRequest } from "../middleware/auth.middleware";
 
 const registerSchema = z.object({
   name: z.string().min(2),
@@ -22,7 +23,7 @@ const loginSchema = z.object({
 export async function register(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
     const data = registerSchema.parse(req.body);
 
@@ -42,10 +43,9 @@ export async function register(
 }
 
 export async function login(
-  
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
     const data = loginSchema.parse(req.body);
 
@@ -64,16 +64,19 @@ export async function login(
 }
 
 export async function me(
-    req: AuthRequest,
-    res: Response
-  ) {
-    try {
-      const user = await getCurrentUser(req.user!.id);
-  
-      res.json(user);
-    } catch {
-      res.status(500).json({
-        message: "Server Error",
-      });
-    }
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const user = await getCurrentUser(
+      (req as AuthRequest).user.id
+    );
+
+    res.json(user);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Server Error",
+    });
   }
+}
